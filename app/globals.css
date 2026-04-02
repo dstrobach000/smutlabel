@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --smut-bg: #c0c0c0;
-  --smut-fg: #000000;
-  --smut-link: #0000ff;
+  --smut-bg: #000000;
+  --smut-fg: #ffffff;
+  --smut-link: #99ccff;
 }
 
 body {
@@ -36,7 +36,7 @@ a:hover {
 .smut-hr {
   margin: 0;
   border: 0;
-  border-top: 1px solid #000000;
+  border-top: 1px solid #ffffff;
 }
 
 .smut-stretch {

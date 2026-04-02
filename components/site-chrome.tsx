@@ -15,7 +15,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
         <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-5">
           <Link href="/" className="shrink-0 leading-none">
             <Image
-              src="/images/logo/smut_full_black.png"
+              src="/images/logo/smut_full_white.png"
               alt="SMUT"
               width={88}
               height={88}
