@@ -7,7 +7,9 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="text-left">
-      <h1 className="smut-stretch-h1 mb-3 text-left text-2xl">About</h1>
+      <h1 className="m-0 mb-3 block w-full text-left text-2xl">
+        <span className="smut-stretch-heading">About</span>
+      </h1>
       <p className="m-0 mb-3 font-normal">
         SMUT (South Moravian Utility Tapes) is a small hardcore punk and DIY
         label focused on physical releases — primarily cassettes — and local

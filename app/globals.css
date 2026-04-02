@@ -52,13 +52,13 @@ a:hover {
   transform-origin: left center;
 }
 
-.smut-page h1,
-.smut-page h2 {
+.smut-page main h1,
+.smut-page main h2 {
   font-weight: 700;
 }
 
-.smut-page h1.smut-stretch-h1,
-.smut-page h2.smut-stretch-h2 {
+/* Stretch lives on an inner span so the heading stays a full-width block like <p> — avoids titles sitting in a shrink-wrapped box that misaligns with body and cover. */
+.smut-stretch-heading {
   display: inline-block;
   transform: scaleX(1.4);
   transform-origin: left center;

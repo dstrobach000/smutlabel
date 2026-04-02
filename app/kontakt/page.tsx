@@ -7,7 +7,9 @@ export const metadata: Metadata = {
 export default function KontaktPage() {
   return (
     <div className="text-left">
-      <h1 className="smut-stretch-h1 mb-3 text-left text-2xl">Kontakt</h1>
+      <h1 className="m-0 mb-3 block w-full text-left text-2xl">
+        <span className="smut-stretch-heading">Kontakt</span>
+      </h1>
       <p className="m-0 mb-3 font-normal">
         Orders, trades, demos, and vague threats:
       </p>
