@@ -11,7 +11,7 @@ export default function Home() {
         for the patient.
       </p>
       <hr className="smut-hr mb-5" />
-      <h2 className="smut-stretch-h2 mb-3 text-center text-xl">Latest release</h2>
+      <h2 className="smut-stretch-h2 mb-3 text-left text-xl">Catalog</h2>
       {first ? <ReleaseEntry release={first} /> : null}
     </div>
   );

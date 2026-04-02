@@ -12,13 +12,13 @@ export function SiteChrome({ children }: { children: ReactNode }) {
   return (
     <div className="smut-page min-h-screen py-6">
       <header className="smut-column mx-auto text-center">
-        <Link href="/" className="inline-block leading-none">
+        <Link href="/" className="mx-auto block w-full max-w-[min(92vw,560px)] leading-none">
           <Image
-            src="/images/logo/smut_full_white.png"
+            src="/images/logo/smut_typo_white.png"
             alt="SMUT — South Moravian Utility Tapes"
-            width={1200}
-            height={1200}
-            className="mx-auto h-auto w-[min(88vw,360px)] max-w-full object-contain sm:w-[min(72vw,440px)]"
+            width={11811}
+            height={3937}
+            className="mx-auto block h-auto w-full max-w-full object-contain"
             priority
           />
         </Link>

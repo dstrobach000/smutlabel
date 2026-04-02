@@ -61,5 +61,5 @@ a:hover {
 .smut-page h2.smut-stretch-h2 {
   display: inline-block;
   transform: scaleX(1.4);
-  transform-origin: center;
+  transform-origin: left center;
 }
