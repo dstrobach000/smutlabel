@@ -14,6 +14,6 @@ export const RELEASES: Release[] = [
     title: "Flüst",
     coverSrc: "/images/releases/001_almamater_flust.jpg",
     description:
-      "First SMUT tape: raw hardcore out of the snow line, basement-recorded and dubbed in small runs. Fiery guitars, stubborn drums, vocals that do not ask permission. Cassette only — no remorse, no remaster fantasy.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
   },
 ];

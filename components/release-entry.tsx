@@ -15,7 +15,7 @@ export function ReleaseEntry({ release }: { release: Release }) {
       />
       <div className="min-w-0 flex-1 text-left">
         <p className="m-0 mb-3 font-normal leading-snug">
-          <strong className="smut-stretch font-bold">{line}</strong>
+          <strong className="smut-stretch-left font-bold">{line}</strong>
         </p>
         <p className="m-0 font-normal leading-snug">{release.description}</p>
       </div>

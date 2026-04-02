@@ -45,6 +45,13 @@ a:hover {
   transform-origin: center;
 }
 
+/* Same horizontal stretch but anchored left so text does not bleed over a left-adjacent image. */
+.smut-stretch-left {
+  display: inline-block;
+  transform: scaleX(1.4);
+  transform-origin: left center;
+}
+
 .smut-page h1,
 .smut-page h2 {
   font-weight: 700;
