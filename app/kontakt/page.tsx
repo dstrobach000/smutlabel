@@ -11,10 +11,20 @@ export default function KontaktPage() {
         <span className="smut-stretch-heading">Kontakt</span>
       </h1>
       <p className="m-0 mb-3 font-normal">
-        Orders, trades, demos, and vague threats:
+        Ak chceš kazetku napíš nám na —{" "}
+        <a href="mailto:postmaster@smutlabel.monster">postmaster@smutlabel.monster</a>
+      </p>
+      <p className="m-0 mb-3 font-normal">
+        Ak chceš vedieť aké koncerty plánujeme, pozri si{" "}
+        <a href="https://instagram.com/stitchskindeep" target="_blank" rel="noopener noreferrer">
+          @stitchskindeep
+        </a>
       </p>
       <p className="m-0 font-normal">
-        <a href="mailto:info@smutlabel.monster">info@smutlabel.monster</a>
+        Ak máš s niečím problem napíš mi na —{" "}
+        <a href="https://instagram.com/boilerhudak" target="_blank" rel="noopener noreferrer">
+          @boilerhudak
+        </a>
       </p>
     </div>
   );

@@ -3,8 +3,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 const NAV = [
-  { href: "/about", label: "About" },
-  { href: "/releases", label: "Releases" },
+  { href: "/", label: "Katalóg" },
+  { href: "/info", label: "Info" },
   { href: "/kontakt", label: "Kontakt" },
 ] as const;
 
@@ -14,7 +14,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
       <header className="smut-column mx-auto text-center">
         <Link href="/" className="mx-auto block w-full max-w-[min(92vw,560px)] leading-none">
           <Image
-            src="/images/logo/smut_typo_white.png"
+            src="/images/logo/web_banner.png"
             alt="SMUT — South Moravian Utility Tapes"
             width={11811}
             height={3937}
@@ -40,8 +40,32 @@ export function SiteChrome({ children }: { children: ReactNode }) {
 
       <footer className="smut-column mx-auto text-center">
         <hr className="smut-hr" />
+        <div className="mt-4 grid grid-cols-3 items-center gap-4">
+          <Image
+            src="/images/logo/vpn_logo.png"
+            alt="VPN"
+            width={400}
+            height={400}
+            className="h-auto w-full object-contain"
+          />
+          <Image
+            src="/images/logo/stitch_logo.png"
+            alt="STITCH"
+            width={400}
+            height={400}
+            className="h-auto w-full object-contain"
+          />
+          <Image
+            src="/images/logo/brno_antifa_logo.png"
+            alt="Brno Antifa"
+            width={400}
+            height={400}
+            className="h-auto w-full object-contain"
+          />
+        </div>
+        <hr className="smut-hr mt-4" />
         <p className="m-0 mt-4 text-base font-normal">
-          <a href="mailto:info@smutlabel.monster">info@smutlabel.monster</a>
+          <a href="mailto:postmaster@smutlabel.monster">postmaster@smutlabel.monster</a>
         </p>
       </footer>
     </div>
