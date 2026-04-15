@@ -1,7 +1,16 @@
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
+
+async function getDB(): Promise<D1Database> {
+  const { getCloudflareContext } = await import("@opennextjs/cloudflare");
+  const ctx = await getCloudflareContext();
+  const env = ctx.env as unknown as Record<string, unknown>;
+  if (!env.DB) {
+    throw new Error("D1 binding 'DB' not found in env. Available keys: " + Object.keys(env).join(", "));
+  }
+  return env.DB as D1Database;
+}
 
 export async function GET(request: NextRequest) {
   const catalogId = request.nextUrl.searchParams.get("catalogId");
@@ -10,20 +19,14 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const { env } = await getCloudflareContext<{ DB: D1Database }>();
-
-    const { results } = await env.DB.prepare(
-      "SELECT id, catalog_id, parent_id, nick, body, created_at FROM comments WHERE catalog_id = ? ORDER BY created_at ASC"
-    )
+    const db = await getDB();
+    const { results } = await db
+      .prepare("SELECT id, catalog_id, parent_id, nick, body, created_at FROM comments WHERE catalog_id = ? ORDER BY created_at ASC")
       .bind(catalogId)
       .all();
-
     return NextResponse.json(results ?? []);
   } catch (err) {
-    return NextResponse.json(
-      { error: "DB error", detail: String(err) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }
 
@@ -41,14 +44,12 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    const db = await getDB();
     const id = crypto.randomUUID();
     const now = Date.now();
 
-    const { env } = await getCloudflareContext<{ DB: D1Database }>();
-
-    await env.DB.prepare(
-      "INSERT INTO comments (id, catalog_id, parent_id, nick, body, created_at) VALUES (?, ?, ?, ?, ?, ?)"
-    )
+    await db
+      .prepare("INSERT INTO comments (id, catalog_id, parent_id, nick, body, created_at) VALUES (?, ?, ?, ?, ?, ?)")
       .bind(id, catalogId, parentId ?? null, nick.trim(), text.trim(), now)
       .run();
 
@@ -57,9 +58,6 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (err) {
-    return NextResponse.json(
-      { error: "DB error", detail: String(err) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }
