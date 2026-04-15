@@ -71,6 +71,7 @@ export function Comments({ catalogId }: { catalogId: string }) {
   const [text, setText] = useState("");
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -108,6 +109,7 @@ export function Comments({ catalogId }: { catalogId: string }) {
     if (!trimmed || !nickLocked || submitting) return;
 
     setSubmitting(true);
+    setError("");
     try {
       const res = await fetch("/api/comments", {
         method: "POST",
@@ -119,11 +121,17 @@ export function Comments({ catalogId }: { catalogId: string }) {
           text: trimmed,
         }),
       });
-      if (!res.ok) return;
+      if (!res.ok) {
+        const body = await res.text();
+        setError(`Chyba: ${res.status} — ${body}`);
+        return;
+      }
       const newComment: Comment = await res.json();
       setComments((prev) => [...prev, newComment]);
       setText("");
       setReplyTo(null);
+    } catch (err) {
+      setError(`Chyba: ${String(err)}`);
     } finally {
       setSubmitting(false);
     }
@@ -216,6 +224,9 @@ export function Comments({ catalogId }: { catalogId: string }) {
                 {submitting ? "…" : "Odoslať"}
               </button>
             </div>
+            {error && (
+              <p className="m-0 mt-2 text-sm text-red-400">{error}</p>
+            )}
           </>
         )}
       </div>

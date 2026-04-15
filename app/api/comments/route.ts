@@ -9,15 +9,22 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "catalogId required" }, { status: 400 });
   }
 
-  const { env } = await getCloudflareContext<{ DB: D1Database }>();
+  try {
+    const { env } = await getCloudflareContext<{ DB: D1Database }>();
 
-  const { results } = await env.DB.prepare(
-    "SELECT id, catalog_id, parent_id, nick, body, created_at FROM comments WHERE catalog_id = ? ORDER BY created_at ASC"
-  )
-    .bind(catalogId)
-    .all();
+    const { results } = await env.DB.prepare(
+      "SELECT id, catalog_id, parent_id, nick, body, created_at FROM comments WHERE catalog_id = ? ORDER BY created_at ASC"
+    )
+      .bind(catalogId)
+      .all();
 
-  return NextResponse.json(results ?? []);
+    return NextResponse.json(results ?? []);
+  } catch (err) {
+    return NextResponse.json(
+      { error: "DB error", detail: String(err) },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -33,19 +40,26 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "catalogId, nick, and text are required" }, { status: 400 });
   }
 
-  const id = crypto.randomUUID();
-  const now = Date.now();
+  try {
+    const id = crypto.randomUUID();
+    const now = Date.now();
 
-  const { env } = await getCloudflareContext<{ DB: D1Database }>();
+    const { env } = await getCloudflareContext<{ DB: D1Database }>();
 
-  await env.DB.prepare(
-    "INSERT INTO comments (id, catalog_id, parent_id, nick, body, created_at) VALUES (?, ?, ?, ?, ?, ?)"
-  )
-    .bind(id, catalogId, parentId ?? null, nick.trim(), text.trim(), now)
-    .run();
+    await env.DB.prepare(
+      "INSERT INTO comments (id, catalog_id, parent_id, nick, body, created_at) VALUES (?, ?, ?, ?, ?, ?)"
+    )
+      .bind(id, catalogId, parentId ?? null, nick.trim(), text.trim(), now)
+      .run();
 
-  return NextResponse.json(
-    { id, catalog_id: catalogId, parent_id: parentId ?? null, nick: nick.trim(), body: text.trim(), created_at: now },
-    { status: 201 }
-  );
+    return NextResponse.json(
+      { id, catalog_id: catalogId, parent_id: parentId ?? null, nick: nick.trim(), body: text.trim(), created_at: now },
+      { status: 201 }
+    );
+  } catch (err) {
+    return NextResponse.json(
+      { error: "DB error", detail: String(err) },
+      { status: 500 }
+    );
+  }
 }

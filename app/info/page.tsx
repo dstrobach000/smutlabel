@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Info",
@@ -10,6 +11,15 @@ export default function InfoPage() {
       <h1 className="m-0 mb-3 block w-full text-left text-2xl">
         <span className="smut-stretch-heading">Info</span>
       </h1>
+
+      <Image
+        src="/images/misc/info.jpg"
+        alt="SMUT"
+        width={600}
+        height={400}
+        className="mb-4 h-auto w-full max-w-[600px]"
+        sizes="(max-width: 640px) 100vw, 600px"
+      />
 
       <p className="m-0 mb-3 font-normal">
         SMUT alebo South Moravian Utility Tapes (Jihomoravské užitkové pásky) je
