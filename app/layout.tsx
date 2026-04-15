@@ -4,10 +4,10 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "SMUT — South Moravian Utility Tapes",
-    template: "%s — SMUT",
+    default: "SMUT – South Moravian Utility Tapes",
+    template: "%s – SMUT",
   },
-  description: "Hardcore punk / DIY tape label — South Moravian Utility Tapes.",
+  description: "Hardcore punk / DIY tape label – South Moravian Utility Tapes.",
   icons: {
     icon: [
       { url: "/images/favicon/ikona_32x32.png", sizes: "32x32", type: "image/png" },

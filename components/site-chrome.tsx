@@ -15,7 +15,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
         <Link href="/" className="mx-auto block w-full max-w-[min(92vw,560px)] leading-none">
           <Image
             src="/images/logo/web_banner.png"
-            alt="SMUT — South Moravian Utility Tapes"
+            alt="SMUT – South Moravian Utility Tapes"
             width={11811}
             height={3937}
             className="mx-auto block h-auto w-full max-w-full object-contain"

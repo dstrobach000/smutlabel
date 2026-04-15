@@ -4,28 +4,11 @@ import { useState, useEffect, useCallback } from "react";
 
 interface Comment {
   id: string;
+  catalog_id: string;
+  parent_id: string | null;
   nick: string;
-  text: string;
-  ts: number;
-  parentId: string | null;
-}
-
-function getStorageKey(catalogId: string) {
-  return `smut-comments-${catalogId}`;
-}
-
-function loadComments(catalogId: string): Comment[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = localStorage.getItem(getStorageKey(catalogId));
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveComments(catalogId: string, comments: Comment[]) {
-  localStorage.setItem(getStorageKey(catalogId), JSON.stringify(comments));
+  body: string;
+  created_at: number;
 }
 
 function timeAgo(ts: number): string {
@@ -54,9 +37,9 @@ function CommentItem({
     <div className="border-l border-white/20 pl-3">
       <p className="m-0 text-sm">
         <strong>{comment.nick}</strong>
-        <span className="ml-2 opacity-50">{timeAgo(comment.ts)}</span>
+        <span className="ml-2 opacity-50">{timeAgo(comment.created_at)}</span>
       </p>
-      <p className="m-0 mt-1">{comment.text}</p>
+      <p className="m-0 mt-1">{comment.body}</p>
       <button
         type="button"
         onClick={() => onReply(comment.id)}
@@ -70,7 +53,7 @@ function CommentItem({
             <CommentItem
               key={r.id}
               comment={r}
-              replies={allComments.filter((c) => c.parentId === r.id)}
+              replies={allComments.filter((c) => c.parent_id === r.id)}
               allComments={allComments}
               onReply={onReply}
             />
@@ -87,16 +70,21 @@ export function Comments({ catalogId }: { catalogId: string }) {
   const [nickLocked, setNickLocked] = useState(false);
   const [text, setText] = useState("");
   const [replyTo, setReplyTo] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    setComments(loadComments(catalogId));
     const saved = localStorage.getItem("smut-nick");
     if (saved) {
       setNick(saved);
       setNickLocked(true);
     }
+
+    fetch(`/api/comments?catalogId=${encodeURIComponent(catalogId)}`)
+      .then((r) => r.json())
+      .then((data) => setComments(data as Comment[]))
+      .catch(() => {});
   }, [catalogId]);
 
   const handleReply = useCallback((parentId: string) => {
@@ -115,26 +103,35 @@ export function Comments({ catalogId }: { catalogId: string }) {
     setNickLocked(false);
   }
 
-  function submit() {
+  async function submit() {
     const trimmed = text.trim();
-    if (!trimmed || !nickLocked) return;
-    const newComment: Comment = {
-      id: crypto.randomUUID(),
-      nick,
-      text: trimmed,
-      ts: Date.now(),
-      parentId: replyTo,
-    };
-    const next = [...comments, newComment];
-    setComments(next);
-    saveComments(catalogId, next);
-    setText("");
-    setReplyTo(null);
+    if (!trimmed || !nickLocked || submitting) return;
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          catalogId,
+          parentId: replyTo,
+          nick,
+          text: trimmed,
+        }),
+      });
+      if (!res.ok) return;
+      const newComment: Comment = await res.json();
+      setComments((prev) => [...prev, newComment]);
+      setText("");
+      setReplyTo(null);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (!mounted) return null;
 
-  const topLevel = comments.filter((c) => !c.parentId);
+  const topLevel = comments.filter((c) => !c.parent_id);
   const replyTarget = replyTo ? comments.find((c) => c.id === replyTo) : null;
 
   return (
@@ -150,7 +147,7 @@ export function Comments({ catalogId }: { catalogId: string }) {
           <CommentItem
             key={c.id}
             comment={c}
-            replies={comments.filter((r) => r.parentId === c.id)}
+            replies={comments.filter((r) => r.parent_id === c.id)}
             allComments={comments}
             onReply={handleReply}
           />
@@ -210,8 +207,13 @@ export function Comments({ catalogId }: { catalogId: string }) {
                 placeholder="Napíš komentár…"
                 className="smut-input flex-1"
               />
-              <button type="button" onClick={submit} className="smut-btn">
-                Odoslať
+              <button
+                type="button"
+                onClick={submit}
+                disabled={submitting}
+                className="smut-btn"
+              >
+                {submitting ? "…" : "Odoslať"}
               </button>
             </div>
           </>
